@@ -111,7 +111,7 @@ Utility for checking code style for all bash scripts and dockerfiles in the repo
 git clone https://github.com/EdmonDantes/docker-shell-utils.git utils
 
 # Optional
-alias check-docker ./utils/dev/check.sh 
+alias check-docker=./utils/dev/check.sh 
 ```
 
 #### Usage
