@@ -1,4 +1,4 @@
 #!/bin/sh
 
-PATH="$PATH:$(pwd)";
+PATH="$PATH:$(dirname "$(realpath "$0")")";
 export PATH;
