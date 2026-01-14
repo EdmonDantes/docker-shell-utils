@@ -95,6 +95,22 @@ function main {
     fi
     clean;
     post;
+  elif [[ "$1" == "resolve" ]]; then
+    if [[ -x $(command -v "$2") ]]; then
+      return 0;
+    fi
+
+    local package_name;
+    if [[ -n "$3" ]]; then
+      package_name="$3"
+    else
+      package_name="$2"
+    fi
+
+    if ! try_install "$package_name"; then
+      update;
+      try_install "$package_name";
+    fi
   fi
 }
 
