@@ -95,6 +95,12 @@ function trace {
 
 function main {
 
+  set -e;
+
+  if is_debug_enabled.sh; then
+    set -x;
+  fi
+
   if [[ -z "$1" ]]; then
     return 1
   fi

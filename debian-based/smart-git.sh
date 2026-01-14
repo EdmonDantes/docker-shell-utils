@@ -60,6 +60,12 @@ function clone {
 
 function main {
 
+  set -e;
+
+  if is_debug_enabled.sh; then
+    set -x;
+  fi
+
   if [[ "$1" == "install" ]]; then
     install;
   elif [[ "$1" == "configure" ]]; then

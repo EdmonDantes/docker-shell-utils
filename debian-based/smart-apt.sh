@@ -19,6 +19,10 @@ function pre_proxy {
   elif [[ -n "$APT_HTTP_PROXY" ]]; then
     replace-or-add.sh "Acquire::https::Proxy.*" "Acquire::https::Proxy \"DIRECT\";" "$proxy_config_file"
   fi
+
+  if is_debug_enabled.sh; then
+    cat "$proxy_config_file"
+  fi
 }
 
 function pre {
@@ -35,7 +39,13 @@ function post_proxy {
     proxy_config_file="$APT_PROXY_CONFIG_FILE";
   fi
 
-  rm "$proxy_config_file";
+
+
+  if is_debug_enabled.sh; then
+    cat "$proxy_config_file"
+  fi
+
+  rm -f "$proxy_config_file" || true;
 
 }
 
@@ -53,10 +63,17 @@ function clean {
 }
 
 function try_install {
+  export DEBIAN_FRONTEND=noninteractive
   apt-get install -y --no-install-recommends "$@";
 }
 
 function main {
+  set -e;
+
+  if is_debug_enabled.sh; then
+    set -x;
+  fi
+
   if [[ "$1" == "pre" ]]; then
     pre;
   elif [[ "$1" == "post" ]]; then
