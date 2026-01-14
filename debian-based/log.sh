@@ -2,7 +2,7 @@
 
 function level_to_number {
   local level;
-  if [[ -n "$(which to_lower.sh)" ]]; then
+  if [[ -x "$(command -v to_lower.sh)" ]]; then
     level=$(to_lower.sh "$1")
   else
     level="$1"
@@ -28,7 +28,7 @@ function level_to_number {
 function compare_levels {
   local a;
 
-  if [[ -n "$(which to_lower.sh)" ]]; then
+  if [[ -x "$(command -v to_lower.sh)" ]]; then
     a=$(to_lower.sh "$1")
   else
     a="$1"
@@ -36,7 +36,7 @@ function compare_levels {
 
   local b;
 
-  if [[ -n "$(which to_lower.sh)" ]]; then
+  if [[ -x "$(command -v to_lower.sh)" ]]; then
     b=$(to_lower.sh "$2")
   else
     b="$2"
@@ -54,7 +54,7 @@ function compare_levels {
 function error {
   if [[ -n "$LOG_FILE" ]]; then
     echo "[ERROR]" "$@" >> "$LOG_FILE";
-  elif [[ -n "$(which try_parse_boolean.sh)" && "$(try_parse_boolean.sh "$LOG_ERROR_MERGE")" == 'true' ]]; then
+  elif [[ -x "$(command -v try_parse_boolean.sh)" && "$(try_parse_boolean.sh "$LOG_ERROR_MERGE")" == 'true' ]]; then
     echo "[ERROR]" "$@"
   else
     >&2 echo "[ERROR]" "$@"
@@ -111,7 +111,7 @@ function main {
 
   local max_level;
   if [[ -n "$LOG_LEVEL" ]]; then
-    if [[ -n "$(which to_lower.sh)" ]]; then
+    if [[ -x "$(command -v to_lower.sh)" ]]; then
       max_level=$(to_lower.sh "$LOG_LEVEL")
     else
       max_level="$LOG_LEVEL"
@@ -121,7 +121,7 @@ function main {
   fi
 
   local level;
-  if [[ -n "$(which to_lower.sh)" ]]; then
+  if [[ -x "$(command -v to_lower.sh)" ]]; then
     level=$(to_lower.sh "$1")
   else
     level="$1"
