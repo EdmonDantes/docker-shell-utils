@@ -31,10 +31,21 @@ function local_last_tag {
 }
 
 function remote_last_tag {
-  git -c 'vesionsort.suffix=-' \
-    ls-remote --exit-code --refs --sort='version:refname' --tags "$1" '*.*.*' \
-    | tail --lines=1 \
-    | cut --delimiter='/' --field=3
+  git ls-remote --exit-code --refs --tags "$1" \
+    | grep -E 'refs/tags/v?[0-9]+.[0-9]*.[0-9]*' \
+    | cut --delimiter='/' --field=3 \
+    | tr '-' '~' \
+    | sed -E 's/v//' \
+    | sort -V \
+    | tail -n 1
+}
+
+function check_remote_tag {
+  if git ls-remote --exit-code --tags "$1" "$2"; then
+    return 0
+  else
+    return 1
+  fi
 }
 
 function prepare_submodules {
@@ -55,7 +66,11 @@ function clone {
     branch=$(remote_last_tag "$1");
   fi
 
-  git clone --recursive --depth 1 --branch "$branch" --single-branch "$@";
+  if check_remote_tag "$1" "v$branch"; then
+    branch="v$branch"
+  fi
+
+  git clone --depth 1 --recurse-submodules --shallow-submodules --branch "$branch" --single-branch "$1" "$2";
 }
 
 function main {
@@ -69,18 +84,20 @@ function main {
   if [[ "$1" == "install" ]]; then
     install;
   elif [[ "$1" == "configure" ]]; then
-    configure "${@:2}";
-  elif [[ "$1" == "pre" ]]; then
     install;
-    configure;
-  elif [[ "$1" == "last-tag" ]]; then
-    if [[ "$2" == "local" ]]; then
-      local_last_tag;
+    configure "${@:2}";
+  elif [[ "$1" == "tag" ]]; then
+    if [[ "$2" == "local" && "$3" == "last" ]]; then
+      local_last_tag "${@:4}";
     elif [[ "$2" == "remote" ]]; then
-      remote_last_tag "${@:3}"
+      if [[ "$3" == "last" ]]; then
+        remote_last_tag "${@:4}"
+      elif [[ "$3" == "check" ]]; then
+        check_remote_tag "${@:4}";
+      fi
     fi
   elif [[ "$1" == "prepare-submodules" ]]; then
-    prepare_submodules;
+    prepare_submodules "${@:2}";
   elif [[ "$1" == "clone-only" ]]; then
     clone "${@:2}";
   elif [[ "$1" == "clone" ]]; then
