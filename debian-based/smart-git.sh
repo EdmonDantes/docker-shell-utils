@@ -91,7 +91,6 @@ function main {
 
 }
 
-main "$@";
-
-
-
+if ! main "$@"; then
+  exit 1;
+fi
