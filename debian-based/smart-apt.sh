@@ -82,9 +82,12 @@ function main {
     update;
   elif [[ "$1" == "clean" ]]; then
     clean;
-  elif [[ "$1" == "install-only" ]]; then
-    try_install "${@:2}";
   elif [[ "$1" == "install" ]]; then
+    if ! try_install "${@:2}"; then
+      update;
+      try_install "${@:2}";
+    fi
+  elif [[ "$1" == "full-install" ]]; then
     pre;
     if ! try_install "${@:2}"; then
       update;
