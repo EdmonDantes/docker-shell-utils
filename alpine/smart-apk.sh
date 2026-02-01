@@ -29,9 +29,24 @@ main() {
       shift 2
       try_install_virtual "$@"
     fi
+  elif [ "$1" = "full-install" ]; then
+    shift 1
+    try_install "$@"
   elif [ "$1" = "delete" ]; then
     shift 1
     delete "$@"
+  elif [ "$1" = "resolve" ]; then
+    if [ -x "$(command -v "$2")" ]; then
+      return 0;
+    fi
+
+    if [ -n "$3" ]; then
+      _main_package_name="$3"
+    else
+      _main_package_name="$2"
+    fi
+
+    try_install "$_main_package_name";
   fi
 }
 

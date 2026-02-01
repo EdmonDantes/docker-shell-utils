@@ -71,7 +71,10 @@ Utility for easily installing packages by `apk` command.
 - `install real <package> [packages]` - install packages without cache like normal packages
 - `install virtual <package> [packages]` - install packages with cache like one virtual package that depends on
   specified packages (more easily for delete in future)
+- `full-install` - sinomical with `install real`
 - `delete <package> [package]` - delete packages
+- `resolve <command> [package]` - check if command is installed and install it if not without any preparations and/or
+  cleaning
 
 ##### Preparations
 
