@@ -4,6 +4,10 @@ function install {
   smart-apt.sh install git ca-certificates;
 }
 
+function full-install {
+  smart-apt.sh full-install git ca-certificates;
+}
+
 function configure {
 
   local email;
@@ -83,8 +87,10 @@ function main {
 
   if [[ "$1" == "install" ]]; then
     install;
+  elif [[ "$1" == "full-install" ]]; then
+    full-install;
   elif [[ "$1" == "configure" ]]; then
-    install;
+    full-install;
     configure "${@:2}";
   elif [[ "$1" == "tag" ]]; then
     if [[ "$2" == "local" && "$3" == "last" ]]; then
@@ -101,7 +107,7 @@ function main {
   elif [[ "$1" == "clone-only" ]]; then
     clone "${@:2}";
   elif [[ "$1" == "clone" ]]; then
-    install;
+    full_install;
     configure;
     clone "${@:2}";
   fi

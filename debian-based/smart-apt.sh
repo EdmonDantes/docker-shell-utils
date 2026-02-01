@@ -10,13 +10,13 @@ function pre_proxy {
     proxy_config_file="$APT_PROXY_CONFIG_FILE";
   fi
 
-  if [[ -n "$APT_HTTP_PROXY" ]]; then
-    replace-or-add.sh "Acquire::http::Proxy.*" "Acquire::http::Proxy \"$APT_HTTP_PROXY\";" "$proxy_config_file"
+  if [[ -n "$HTTP_PROXY" ]]; then
+    replace-or-add.sh "Acquire::http::Proxy.*" "Acquire::http::Proxy \"$HTTP_PROXY\";" "$proxy_config_file"
   fi
 
-  if [[ -n "$APT_HTTPS_PROXY" ]]; then
-    replace-or-add.sh "Acquire::https::Proxy.*" "Acquire::https::Proxy \"$DRBD_BUILDER_APT_HTTPS_PROXY\";" "$proxy_config_file"
-  elif [[ -n "$APT_HTTP_PROXY" ]]; then
+  if [[ -n "$HTTPS_PROXY" ]]; then
+    replace-or-add.sh "Acquire::https::Proxy.*" "Acquire::https::Proxy \"$HTTPS_PROXY\";" "$proxy_config_file"
+  elif [[ -n "$HTTP_PROXY" ]]; then
     replace-or-add.sh "Acquire::https::Proxy.*" "Acquire::https::Proxy \"DIRECT\";" "$proxy_config_file"
   fi
 
